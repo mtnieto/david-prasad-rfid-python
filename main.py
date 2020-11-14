@@ -40,9 +40,7 @@ class World:
             self.pid = self.pid2
             self.pid2 = self.pid2 ^ self.n1 ^ self.n2
             return 0
-        
 
-       
 
 
     class Reader():
