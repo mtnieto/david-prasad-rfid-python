@@ -38,7 +38,7 @@ class World:
 
         def recalculatePseudonim(self): # (K1 and n1) xor (K2 and n2)
             self.pid = self.pid2
-            self.pid2 = self pid2 ^ self.n1 ^ self.n2
+            self.pid2 = self.pid2 ^ self.n1 ^ self.n2
             return 0
         
 
@@ -57,7 +57,7 @@ class World:
 
         def generateA(self): # (PID2 and K1 and K2) xor n
             print(self.pid2 & self.k1 &  self.k2) ^ self.n1
-            return (self.pid2 | self.k1 | self.k2) ^ self.n1
+            return (self.pid2 & self.k1 &  self.k2) ^ self.n1
 
         def generateB(self): # (negado PID2and K2 and K1) xor n2
             return (np.uint16(~self.pid2) & self.k2 & self.k1) ^ self.n2
@@ -68,7 +68,7 @@ class World:
 
         def recalculatePseudonim(self): # (K1 and n1) xor (K2 and n2)
             self.pid = self.pid2
-            self.pid2 = self pid2 ^ self.n1 ^ self.n2
+            self.pid2 = self.pid2 ^ self.n1 ^ self.n2
             return 0
 
         def sendMessage(self): #vamos a usar websockets?
