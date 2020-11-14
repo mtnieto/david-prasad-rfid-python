@@ -1,0 +1,12 @@
+
+
+for i in range (100):
+	A, B, D = reader.send_first_message()
+  listener.receive_first_message(A,B,D)
+  tag.receives_first_message(A,B,D)
+  E, F = tag.send_second_message()
+  listener.receive_second_message(E,F)
+  reader.receives_second_message(E,F)
+  
+  tag.recompute_pseudonyms()
+  reader.recompute_pseudonyms()
