@@ -11,15 +11,16 @@ class World:
     def __init__(self): #añadimso numero de rondas?
         self.reader = self.Reader(1,2,6,5) # Reciben lo mismo tag y reader al init
         self.tag = self.Tag(2,1,2,6,5)
+        #to do , create loop to simulate the rounds
         # Reader starts with a,b,d
         self.a = self.reader.generateA()
         self.b = self.reader.generateB()
         self.d = self.reader.generateD()
         # Reader -> Tag
         self.Tag.receivesABD(self, self.a,self.b,self.d) # receibes A, B, D in order to get n1 and n2 and then check it
-        self.Tag.calculateN1N2(self) # Calculate n1 and n2 with A, B
+        self.Tag.calculateN1N2() # Calculate n1 and n2 with A, B
         self.Tag.checkN1N2() # Check result with D
-        self.e = self.Tag.generateE()
+        self.e = self.Tag.generateE(self)
         self.f = self.Tag.generateF()
         # Tag -> Reader
         self.Reader.receivesEF(self.e,self.f)
