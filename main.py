@@ -9,7 +9,6 @@ import numpy as np
 class World:
     
     def __init__(self): #añadimso numero de rondas?
-        self.channel = []
         self.reader = self.Reader(1,2,6,5) # Reciben lo mismo tag y reader al init
         self.tag = self.Tag(2,1,2,6,5)
         # Reader starts with a,b,d
