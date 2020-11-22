@@ -10,9 +10,25 @@ class World:
     
     def __init__(self): #añadimso numero de rondas?
         self.channel = []
-        #self.reader = self.Reader(2,1,2,6, 5) # Reciben lo mismo tag y reader al init
+        self.reader = self.Reader(1,2,6,5) # Reciben lo mismo tag y reader al init
         self.tag = self.Tag(2,1,2,6,5)
-        self.tag.generateF()
+        # Reader starts with a,b,d
+        self.a = self.reader.generateA()
+        self.b = self.reader.generateB()
+        self.d = self.reader.generateD()
+        # Reader -> Tag
+        self.Tag.receivesABD(self, self.a,self.b,self.d) # receibes A, B, D in order to get n1 and n2 and then check it
+        self.Tag.calculateN1N2(self) # Calculate n1 and n2 with A, B
+        self.Tag.checkN1N2() # Check result with D
+        self.e = self.Tag.generateE()
+        self.f = self.Tag.generateF()
+        # Tag -> Reader
+        self.Reader.receivesEF(self.e,self.f)
+        self.Reader.getID() # Calculate ID with E
+        self.Reader.checkN1N2() # Check with F
+        # Round finished, recalculating pseudonim pid and pid2
+        self.Reader.recalculatePseudonim()
+        self.Tag.recalculatePseudonim()
 
         
 
@@ -25,12 +41,28 @@ class World:
             self.pid2 = pid2
             self.k1 = k1
             self.k2 = k2
-            self.n1 = 2
-            self.n2 = 2
+         
+        def receivesABD(self, a, b, d):
+            self.a = a
+            self.b = b
+            self.d = d
+        
+        def calculateN1N2(self): # n1 = A XOR (pid2 & k1 & k2)
+            self.x1 = self.pid2 & self.k1 & self.k2
+            self.n1 = self.a ^ self.x1
+
+            self.x2 = np.uint16(~self.pid2) & self.k2 & self.k1
+            self.n2 = self.b ^ self.x2
+        
+        def checkN1N2(self): # K1∧n2 xor ⊕(K2∧n2)
+            if self.d != ((self.k1 & self.n2) ^(self.k2 & self.n1)):
+                raise Exception("Failed Tag at check n1-n2")
+
 
         def generateE(self): # (K1 xor n1 xor PID) xor (k2 ^ n2)
             print(((self.k1 ^ self.n1 ^ self.pid) ^(self.k2 & self.n2)))
             return ((self.k1 ^ self.n1 ^ self.pid) ^(self.k2 & self.n2))
+        
 
         def generateF(self): # (K1 and n1) xor (K2 and n2)
             print((self.k1 & self.n1) ^ (self.k2 & self.n2))
@@ -44,35 +76,42 @@ class World:
 
 
     class Reader():
-        def __init__(self,pid, pid2, k1, k2, channel):
+        def __init__(self,pid, pid2, k1, k2):
             self.pid = pid
             self.pid2 = pid2
             self.k1 = k1
             self.k2 = k2
-            self.channel = channel
-            self.n1 = random.randint(0, 7) # estos son compartidos no iria en el world?
+            self.n1 = random.randint(0, 7)
             self.n2 = random.randint(0, 7)
 
         def generateA(self): # (PID2 and K1 and K2) xor n
-            print(self.pid2 & self.k1 &  self.k2) ^ self.n1
             return (self.pid2 & self.k1 &  self.k2) ^ self.n1
 
         def generateB(self): # (negado PID2and K2 and K1) xor n2
             return (np.uint16(~self.pid2) & self.k2 & self.k1) ^ self.n2
 
         def generateD(self): # (K1 and n2) xor (K2 and n1)
-            #TODO
             return ((self.k1 & self.n2) ^ self.k2 & self.n1)
+        
+        def receivesEF(self, e, f):
+            self.e = e
+            self.f = f
+        
+        def getID(self):
+            self.y1 = self.k2 ^ self.n2
+            self.y2 = self.k1 ^ self.n1
+            self.y3 = self.e ^ self.y1
+            self.id = self.y3 ^ self.y2
+
+        def checkN1N2(self):
+            if self.f != ((self.k1 & self.n1) ^(self.k2 & self.n2)):
+                raise Exception("Failed Reader at check n1-n2")
+
 
         def recalculatePseudonim(self): # (K1 and n1) xor (K2 and n2)
             self.pid = self.pid2
             self.pid2 = self.pid2 ^ self.n1 ^ self.n2
             return 0
-
-        def sendMessage(self): #vamos a usar websockets?
-            #TODO
-            recomputeRandoms()
-
           
 
 if __name__ == "__main__":
