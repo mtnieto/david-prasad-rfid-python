@@ -13,22 +13,23 @@ class World:
         self.tag = self.Tag(2,1,2,6,5)
         #to do , create loop to simulate the rounds
         # Reader starts with a,b,d
-        self.a = self.reader.generateA()
-        self.b = self.reader.generateB()
-        self.d = self.reader.generateD()
+
+        self.a = self.Reader.generateA(self.reader)
+        self.b = self.Reader.generateB(self.reader)
+        self.d = self.Reader.generateD(self.reader)
         # Reader -> Tag
-        self.Tag.receivesABD(self, self.a,self.b,self.d) # receibes A, B, D in order to get n1 and n2 and then check it
-        self.Tag.calculateN1N2() # Calculate n1 and n2 with A, B
-        self.Tag.checkN1N2() # Check result with D
-        self.e = self.Tag.generateE(self)
-        self.f = self.Tag.generateF()
+        self.Tag.receivesABD(self.tag, self.a,self.b,self.d) # receibes A, B, D in order to get n1 and n2 and then check it
+        self.Tag.calculateN1N2(self.tag) # Calculate n1 and n2 with A, B
+        self.Tag.checkN1N2(self.tag) # Check result with D
+        self.e = self.Tag.generateE(self.tag)
+        self.f = self.Tag.generateF(self.tag)
         # Tag -> Reader
-        self.Reader.receivesEF(self.e,self.f)
-        self.Reader.getID() # Calculate ID with E
-        self.Reader.checkN1N2() # Check with F
+        self.Reader.receivesEF(self.reader, self.e,self.f)
+        self.Reader.getID(self.reader) # Calculate ID with E
+        self.Reader.checkN1N2(self.reader) # Check with F
         # Round finished, recalculating pseudonim pid and pid2
-        self.Reader.recalculatePseudonim()
-        self.Tag.recalculatePseudonim()
+        self.Reader.recalculatePseudonim(self.reader)
+        self.Tag.recalculatePseudonim(self.tag)
 
         
 
