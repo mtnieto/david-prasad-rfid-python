@@ -1,0 +1,39 @@
+import numpy as np
+import random
+class Reader():
+    def __init__(self,pid, pid2, k1, k2):
+        self.pid = pid
+        self.pid2 = pid2
+        self.k1 = k1
+        self.k2 = k2
+        self.n1 = random.randint(0, 7)
+        self.n2 = random.randint(0, 7)
+
+    def generateA(self): # (PID2 and K1 and K2) xor n
+        return (self.pid2 & self.k1 &  self.k2) ^ self.n1
+
+    def generateB(self): # (negado PID2and K2 and K1) xor n2
+        return (np.uint16(~self.pid2) & self.k2 & self.k1) ^ self.n2
+
+    def generateD(self): # (K1 and n2) xor (K2 and n1)
+        return ((self.k1 & self.n2) ^ self.k2 & self.n1)
+    
+    def receivesEF(self, e, f):
+        self.e = e
+        self.f = f
+    
+    def getID(self):
+        self.y1 = self.k2 ^ self.n2
+        self.y2 = self.k1 ^ self.n1
+        self.y3 = self.e ^ self.y1
+        self.id = self.y3 ^ self.y2
+
+    def checkN1N2(self):
+        if self.f != ((self.k1 & self.n1) ^(self.k2 & self.n2)):
+            raise Exception("Failed Reader at check n1-n2")
+
+
+    def recalculatePseudonim(self): # (K1 and n1) xor (K2 and n2)
+        self.pid = self.pid2
+        self.pid2 = self.pid2 ^ self.n1 ^ self.n2
+        return 0
