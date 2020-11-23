@@ -1,10 +1,8 @@
-import random
+
 from reader import Reader
 from tag import Tag
 ## Random int random.randint(0, 9)
 ## Random bin bin(random.randint(0, 7))
-import numpy as np
-
 
 
 class World:
