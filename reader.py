@@ -1,7 +1,11 @@
 import numpy as np
 import random
+import logging
+import logging.config
 class Reader():
     def __init__(self,pid, pid2, k1, k2):
+        self.logger = logging.getLogger(__name__)
+        self.logger.info('[Init] - Initializing Reader')
         self.pid = pid
         self.pid2 = pid2
         self.k1 = k1

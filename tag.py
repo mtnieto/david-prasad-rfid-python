@@ -1,7 +1,11 @@
 import numpy as np
 import random
+import logging
+import logging.config
 class Tag:
     def __init__(self,id, pid, pid2, k1, k2):
+        self.logger = logging.getLogger(__name__)
+        self.logger.info('[Init] - Initializing Tag')
         self.id = id
         self.pid2 = pid2
         self.k1 = k1

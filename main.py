@@ -1,13 +1,14 @@
-
 from reader import Reader
 from tag import Tag
+import logging
+import logging.config
 ## Random int random.randint(0, 9)
 ## Random bin bin(random.randint(0, 7))
 
 
 class World:
     
-    def __init__(self): #añadimso numero de rondas?
+    def __init__(self): 
         self.reader = Reader(1,2,6,5) # Reciben lo mismo tag y reader al init
         self.tag = Tag(2,1,2,6,5)
         #to do , create loop to simulate the rounds
@@ -37,6 +38,8 @@ class World:
           
 
 if __name__ == "__main__":
+    logging.config.fileConfig('logging.conf')
+    logger = logging.getLogger(__name__)
     world = World()
     world.start_simulation(1)
  
