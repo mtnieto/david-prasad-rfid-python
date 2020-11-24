@@ -29,12 +29,12 @@ class Tag:
 
 
     def generateE(self): # (K1 xor n1 xor PID) xor (k2 ^ n2)
-        print(((self.k1 ^ self.n1 ^ self.id) ^(self.k2 & self.n2)))
+        """print(((self.k1 ^ self.n1 ^ self.id) ^(self.k2 & self.n2)))"""
         return ((self.k1 ^ self.n1 ^ self.id) ^(self.k2 & self.n2))
     
 
     def generateF(self): # (K1 and n1) xor (K2 and n2)
-        print((self.k1 & self.n1) ^ (self.k2 & self.n2))
+        """print((self.k1 & self.n1) ^ (self.k2 & self.n2))"""
         return ((self.k1 & self.n1) ^ (self.k2 & self.n2))
 
     def recalculatePseudonim(self): # (K1 and n1) xor (K2 and n2)
