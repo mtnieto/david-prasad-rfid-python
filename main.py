@@ -10,8 +10,8 @@ import logging.config
 class World:
     
     def __init__(self): 
-        self.reader = Reader(1,1,6,5) # Reciben lo mismo tag y reader al init (self,pid, pid2, k1, k2)
-        self.tag = Tag(2,1,1,6,5)  #(self,id, pid, pid2, k1, k2)
+        self.reader = Reader(1,1,111,5) # Reciben lo mismo tag y reader al init (self,pid, pid2, k1, k2)
+        self.tag = Tag(2,1,1,111,5)  #(self,id, pid, pid2, k1, k2)
         self.charlie = Charlie()
         #to do , create loop to simulate the rounds
         # Reader starts with a,b,d
@@ -37,7 +37,7 @@ class World:
             self.reader.checkN1N2() # Check with F
             # Round finished, now Charlie tries to guess k1, k2, ID
             self.charlie.computeAproximation()
-            print("K1:", self.reader.k1)
+            print("K1:", f'{self.reader.k1:08b}')
             # Round finished, recalculating pseudonim pid and pid2
             self.reader.recalculatePseudonim()
             self.tag.recalculatePseudonim()
@@ -50,5 +50,5 @@ if __name__ == "__main__":
     logging.config.fileConfig('logging.conf')
     logger = logging.getLogger(__name__)
     world = World()
-    world.start_simulation(2)
+    world.start_simulation(20)
  

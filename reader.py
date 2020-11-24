@@ -10,8 +10,8 @@ class Reader():
         self.pid2 = pid2
         self.k1 = k1
         self.k2 = k2
-        self.n1 = 2  #random.randint(0, 7)
-        self.n2 = 2 #random.randint(0, 7)
+        self.n1 = random.randint(0, 255)
+        self.n2 = random.randint(0, 255)
 
     def generateA(self): # (PID2 and K1 and K2) xor n
         return (self.pid2 & self.k1 &  self.k2) ^ self.n1

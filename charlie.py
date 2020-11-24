@@ -29,51 +29,79 @@ class Charlie:
         self.k1_estimation = 0
         print(self.d, self.f, self.a ^ self.d)
         for i in range(self.L):
-            
             # For D
-            aux = int(int(self.d)/int(2**(i)))
+            op = int(self.d)
+            aux = int(op/int(2**i))
             value = aux % 2
             self.k1_list[i].append(value)
-            print(bin(int(self.d)))
+            if i == 0:
+                print(f'{op:08b}')
             # For F
-            aux = int(int(self.f)/int(2**(i)))
+            op = int(self.f)
+            aux = int(op/int(2**i))
             value = aux % 2
             self.k1_list[i].append(value)
-            print(bin(int(self.f)))
+            if i == 0:
+                print(f'{op:08b}')
+            #print(f'{op:08b}')
             # For A xor D
             aux = int(int(self.a ^ self.d)/int(2**(i)))
             value = aux % 2
             self.k1_list[i].append(value)
-            print(bin(int(self.a ^ self.d)))
+            if i == 0:
+                print(f'{op:08b}')
+           #print(f'{int(self.a ^ self.d):08b}')
             # For not A xor F
-            aux = int(int(np.uint16(~(self.a ^ self.f)))/int(2**(i)))
+            op = int(np.uint8(~(self.a ^ self.f)))
+            aux = int(op/int(2**i))
             value = aux % 2
             self.k1_list[i].append(value)
-            print(bin(int(np.uint16(~(self.a ^ self.f)))))
+            if i == 0:
+                print(f'{op:08b}')
+            #print(f'{op:08b}')
+
             # For not B xor D
-            aux = int(int(np.uint16(~(self.b ^ self.d)))/int(2**(i)))
+            op = int(np.uint8(~(self.b ^ self.d)))
+            aux = int(op/int(2**i))
             value = aux % 2
             self.k1_list[i].append(value)
-            print(bin(int(np.uint16(~(self.b ^ self.d)))))
+            if i == 0:
+                print(f'{op:08b}')
+            #print(f'{op:08b}')
             # For B xor F
-            aux = int(int(self.b ^ self.f)/int(2**(i)))
+            op = int(self.b ^ self.f)
+            aux = int(op/int(2**i))
             value = aux % 2
             self.k1_list[i].append(value)
-            print(bin(int(self.b ^ self.f)))
+            if i == 0:
+                print(f'{op:08b}')
+            #print(f'{op:08b}')
             # For A xor B xor D
-            aux = int(int(self.a ^ self.b ^ self.d)/int(2**(i)))
+            op = int(self.a ^ self.b ^ self.d)
+            aux = int(op/int(2**i))
             value = aux % 2
+            #print(f'{op:08b}')
             self.k1_list[i].append(value)
-            print(bin(int(self.a ^ self.b ^ self.d)))
+            if i == 0:
+                print(f'{op:08b}')
+            print("----------------")
+            #print(bin(int(self.a ^ self.b ^ self.d)))
              # For A xor B xor F
-            aux = int(int(self.a ^ self.b ^ self.f)/int(2**(i)))
-            value = aux % 2
-            self.k1_list[i].append(value)
-            print(bin(int(self.a ^ self.b ^ self.f)))
+            # op = int(self.a ^ self.b ^ self.f)
+            # aux = int(op/int(2**i))
+            # #print(f'{op:08b}')
+            # value = aux % 2
+            # self.k1_list[i].append(value)
             
             self.k1_estimation += int(statistics.median(self.k1_list[i])) * 2**i
-        print(self.k1_list)
-        print(output, self.k1_estimation)
+        
+        for i in range(self.L):
+            print("List of bins of position",i,"is:",self.k1_list[i])
+            print("Sum of numbers:",sum(self.k1_list[i]))
+            
+        print("----------------")
+
+        print(output, f'{self.k1_estimation:08b}')
 
         """
         Tenemos un array de arrays tal que, en el caso de que k1, k2 e ID fueran de 3 bits:
@@ -90,5 +118,9 @@ class Charlie:
             lista[i].append(value)
             print(statistics.median(lista[i])) //Esto te devuelve la nueva media de la lista de numeros binarios para la posicion i
         
+
+        ----------------
+
+        [7, 6, 5, 4, 3, 2 ,1,0]
 
         """
