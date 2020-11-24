@@ -16,22 +16,22 @@ class World:
     def start_simulation(self,loop):
         i = 0
         while i < loop:
-            self.a = Reader.generateA(self.reader)
-            self.b = Reader.generateB(self.reader)
-            self.d = Reader.generateD(self.reader)
+            self.a = self.reader.generateA()
+            self.b = self.reader.generateB()
+            self.d = self.reader.generateD()
             # Reader -> Tag
-            Tag.receivesABD(self.tag, self.a,self.b,self.d) # receibes A, B, D in order to get n1 and n2 and then check it
-            Tag.calculateN1N2(self.tag) # Calculate n1 and n2 with A, B
-            Tag.checkN1N2(self.tag) # Check result with D
-            self.e = Tag.generateE(self.tag)
-            self.f = Tag.generateF(self.tag)
+            self.tag.receivesABD(self.a,self.b,self.d) # receibes A, B, D in order to get n1 and n2 and then check it
+            self.tag.calculateN1N2() # Calculate n1 and n2 with A, B
+            self.tag.checkN1N2() # Check result with D
+            self.e = self.tag.generateE()
+            self.f = self.tag.generateF()
             # Tag -> Reader
-            Reader.receivesEF(self.reader, self.e,self.f)
-            Reader.getID(self.reader) # Calculate ID with E
-            Reader.checkN1N2(self.reader) # Check with F
+            self.reader.receivesEF(self.e,self.f)
+            self.reader.getID() # Calculate ID with E
+            self.reader.checkN1N2() # Check with F
             # Round finished, recalculating pseudonim pid and pid2
-            Reader.recalculatePseudonim(self.reader)
-            Tag.recalculatePseudonim(self.tag)
+            self.reader.recalculatePseudonim()
+            self.tag.recalculatePseudonim()
             i+=1
 
         
