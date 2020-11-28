@@ -9,15 +9,16 @@ import logging.config
 
 class World:
     
-    def __init__(self):  # valores de 0 a 255 para tener 8 bits
+    def __init__(self, loop):  # valores de 0 a 255 para tener 8 bits
         self.reader = Reader(187,76,112,125) # Reciben lo mismo tag y reader al init (self,pid, pid2, k1, k2)
         self.tag = Tag(222,187,76,112,125)  #(self,id, pid, pid2, k1, k2)
-        self.charlie = Charlie()
+        self.charlie = Charlie(187,112,125, loop)
+        self.loop = loop
         #to do , create loop to simulate the rounds
         # Reader starts with a,b,d
-    def start_simulation(self,loop):
+    def start_simulation(self):
         i = 0
-        while i < loop:
+        while i < self.loop:
             self.a = self.reader.generateA()
             self.b = self.reader.generateB()
             self.d = self.reader.generateD()
@@ -37,14 +38,16 @@ class World:
             self.reader.checkN1N2() # Check with F
             # Round finished, now Charlie tries to guess k1, k2, ID
             self.charlie.computeAproximation()
-            print("K1:", f'{self.reader.k1:08b}')
-            print("K2:", f'{self.reader.k2:08b}')
+            #print("K1:", f'{self.reader.k1:08b}')
+            #print("K2:", f'{self.reader.k2:08b}')
 
             # Round finished, recalculating pseudonim pid and pid2
             self.reader.recalculatePseudonim()
             self.reader.updateN1N2()
             self.tag.recalculatePseudonim()
             i+=1
+        
+        self.charlie.printPlots()
 
         
           
@@ -52,6 +55,6 @@ class World:
 if __name__ == "__main__":
     logging.config.fileConfig('logging.conf')
     logger = logging.getLogger(__name__)
-    world = World()
-    world.start_simulation(20)
+    world = World(20)
+    world.start_simulation()
  
