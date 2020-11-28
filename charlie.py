@@ -26,73 +26,16 @@ class Charlie:
     
     def k1Estimation(self):
         output = "Best estimation of k1 is:"
-        self.k1_estimation = 0
-        print(self.d, self.f, self.a ^ self.d)
+        self.k1_estimation = 0 
+        print(self.d, self.f, self.a ^ self.d) # , 
+        operations = [int(self.d), int(self.f), int(self.a ^ self.d), int(self.a ^ self.b ^ self.f), int(np.uint8(~(self.b ^ self.d))), int(self.b ^ self.f), int(self.a ^ self.b ^ self.d)]
         for i in range(self.L):
-            # For D
-            op = int(self.d)
-            aux = int(op/int(2**i))
-            value = aux % 2
-            self.k1_list[i].append(value)
-            if i == 0:
-                print(f'{op:08b}')
-            # For F
-            op = int(self.f)
-            aux = int(op/int(2**i))
-            value = aux % 2
-            self.k1_list[i].append(value)
-            if i == 0:
-                print(f'{op:08b}')
-            #print(f'{op:08b}')
-            # For A xor D
-            aux = int(int(self.a ^ self.d)/int(2**(i)))
-            value = aux % 2
-            self.k1_list[i].append(value)
-            if i == 0:
-                print(f'{op:08b}')
-           #print(f'{int(self.a ^ self.d):08b}')
-            # For not A xor F
-            op = int(np.uint8(~(self.a ^ self.f)))
-            aux = int(op/int(2**i))
-            value = aux % 2
-            self.k1_list[i].append(value)
-            if i == 0:
-                print(f'{op:08b}')
-            #print(f'{op:08b}')
-
-            # For not B xor D
-            op = int(np.uint8(~(self.b ^ self.d)))
-            aux = int(op/int(2**i))
-            value = aux % 2
-            self.k1_list[i].append(value)
-            if i == 0:
-                print(f'{op:08b}')
-            #print(f'{op:08b}')
-            # For B xor F
-            op = int(self.b ^ self.f)
-            aux = int(op/int(2**i))
-            value = aux % 2
-            self.k1_list[i].append(value)
-            if i == 0:
-                print(f'{op:08b}')
-            #print(f'{op:08b}')
-            # For A xor B xor D
-            op = int(self.a ^ self.b ^ self.d)
-            aux = int(op/int(2**i))
-            value = aux % 2
-            #print(f'{op:08b}')
-            self.k1_list[i].append(value)
-            if i == 0:
-                print(f'{op:08b}')
-            print("----------------")
-            #print(bin(int(self.a ^ self.b ^ self.d)))
-             # For A xor B xor F
-            # op = int(self.a ^ self.b ^ self.f)
-            # aux = int(op/int(2**i))
-            # #print(f'{op:08b}')
-            # value = aux % 2
-            # self.k1_list[i].append(value)
-            
+            for j in range(len(operations)):
+                aux = int(operations[j]/int(2**i))
+                value = aux % 2
+                self.k1_list[i].append(value)
+                if i == 0:
+                    print(f'{operations[j]:08b}')
             self.k1_estimation += int(statistics.median(self.k1_list[i])) * 2**i
         
         for i in range(self.L):

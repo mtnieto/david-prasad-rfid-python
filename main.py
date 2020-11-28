@@ -9,9 +9,9 @@ import logging.config
 
 class World:
     
-    def __init__(self): 
-        self.reader = Reader(1,1,111,5) # Reciben lo mismo tag y reader al init (self,pid, pid2, k1, k2)
-        self.tag = Tag(2,1,1,111,5)  #(self,id, pid, pid2, k1, k2)
+    def __init__(self):  # valores de 0 a 255 para tener 8 bits
+        self.reader = Reader(187,76,112,125) # Reciben lo mismo tag y reader al init (self,pid, pid2, k1, k2)
+        self.tag = Tag(222,187,76,112,125)  #(self,id, pid, pid2, k1, k2)
         self.charlie = Charlie()
         #to do , create loop to simulate the rounds
         # Reader starts with a,b,d
@@ -40,6 +40,7 @@ class World:
             print("K1:", f'{self.reader.k1:08b}')
             # Round finished, recalculating pseudonim pid and pid2
             self.reader.recalculatePseudonim()
+            self.reader.updateN1N2()
             self.tag.recalculatePseudonim()
             i+=1
 
