@@ -38,8 +38,9 @@ class World:
             self.reader.checkN1N2() # Check with F
             # Round finished, now Charlie tries to guess k1, k2, ID
             self.charlie.computeAproximation()
-            #print("K1:", f'{self.reader.k1:08b}')
-            #print("K2:", f'{self.reader.k2:08b}')
+            print("K1:", f'{self.reader.k1:08b}')
+            print("K2:", f'{self.reader.k2:08b}')
+            print("ID:", f'{self.tag.id:08b}')
 
             # Round finished, recalculating pseudonim pid and pid2
             self.reader.recalculatePseudonim()
