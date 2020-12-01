@@ -82,11 +82,11 @@ class Charlie:
         #print(output, f'{self.k2_estimation:08b}')
 
     def hammingDistance(self,a,b):
-        aux = a ^ b
+      #  aux = a ^ b
         res = 0
 
         for i in range(self.L):
-            aux = int(aux/int(2**i))
+            aux = int((a ^ b )/int(2**i))
             value = aux % 2
             res += value
             
