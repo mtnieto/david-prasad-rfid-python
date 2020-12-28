@@ -10,6 +10,7 @@ class Tag:
         self.pid2 = pid2
         self.k1 = k1
         self.k2 = k2
+        self.L = 32
         
     def receivesABD(self, a, b, d):
         self.a = a
@@ -30,7 +31,8 @@ class Tag:
 
     def generateE(self): # (K1 xor n1 xor PID) xor (k2 ^ n2)
         """print(((self.k1 ^ self.n1 ^ self.id) ^(self.k2 & self.n2)))"""
-        return ((self.k1 ^ self.n1 ^ self.id) ^(self.k2 & self.n2))
+        e = ((self.k1 ^ self.n1 ^ self.id) ^(self.k2 & self.n2))
+        return self.rotr(e, 1)
     
 
     def generateF(self): # (K1 and n1) xor (K2 and n2)
@@ -41,3 +43,15 @@ class Tag:
         self.pid = self.pid2
         self.pid2 = self.pid2 ^ self.n1 ^ self.n2
         return 0
+    
+    def rotl(self, num, bits):
+        firstBits = int(num / (2**(self.L-bits)))
+        lastBits = num & (2**(self.L-bits)-1)
+        newBits = int(lastBits*(2**(bits))) + firstBits
+        return newBits
+
+    def rotr(self, num, bits):
+        lastBits = num & (2**bits-1)
+        firstBits = int(num/2**bits)
+        newBits = int(lastBits*(2**(self.L-bits))) + firstBits
+        return newBits

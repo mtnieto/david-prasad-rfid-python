@@ -57,6 +57,6 @@ class World:
 if __name__ == "__main__":
     logging.config.fileConfig('logging.conf')
     logger = logging.getLogger(__name__)
-    world = World(96)
+    world = World(65)
     world.start_simulation()
  

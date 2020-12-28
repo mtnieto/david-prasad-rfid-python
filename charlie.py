@@ -30,7 +30,7 @@ class Charlie:
         self.d = d
     
     def receivesEF(self, e, f):
-        self.e = e
+        self.e = self.rotl(e, 1)
         self.f = f
 
     def computeAproximation(self, l):
@@ -105,3 +105,15 @@ class Charlie:
         if (self.loop-1) ==  l:
             print("ID value:     ", f'{self.id:032b}')
             print(output, f'{self.id_estimation:032b}')
+
+    def rotl(self, num, bits):
+        firstBits = int(num / (2**(self.L-bits)))
+        lastBits = num & (2**(self.L-bits)-1)
+        newBits = int(lastBits*(2**(bits))) + firstBits
+        return newBits
+
+    def rotr(self, num, bits):
+        lastBits = num & (2**bits-1)
+        firstBits = int(num/2**bits)
+        newBits = int(lastBits*(2**(self.L-bits))) + firstBits
+        return newBits
