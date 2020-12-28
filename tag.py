@@ -32,7 +32,8 @@ class Tag:
     def generateE(self): # (K1 xor n1 xor PID) xor (k2 ^ n2)
         """print(((self.k1 ^ self.n1 ^ self.id) ^(self.k2 & self.n2)))"""
         e = ((self.k1 ^ self.n1 ^ self.id) ^(self.k2 & self.n2))
-        return self.rotr(e, 1)
+        rot = self.pid2 % self.L
+        return self.rotr(e, rot)
     
 
     def generateF(self): # (K1 and n1) xor (K2 and n2)

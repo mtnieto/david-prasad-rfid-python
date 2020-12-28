@@ -30,7 +30,7 @@ class Charlie:
         self.d = d
     
     def receivesEF(self, e, f):
-        self.e = self.rotl(e, 1)
+        self.e = e
         self.f = f
 
     def computeAproximation(self, l):

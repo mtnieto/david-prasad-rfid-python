@@ -24,7 +24,8 @@ class Reader():
         return ((self.k1 & self.n2) ^ self.k2 & self.n1)
     
     def receivesEF(self, e, f):
-        self.e = self.rotl(e,1)
+        rot = self.pid2 % self.L
+        self.e = self.rotl(e,rot)
         self.f = f
     
     def getID(self):
