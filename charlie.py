@@ -8,7 +8,7 @@ class Charlie:
     def __init__(self, id, k1, k2, loop):
         self.logger = logging.getLogger(__name__)
         self.logger.info('[Init] - Initializing Charlie')
-        self.L = 8
+        self.L = 32
         self.id = id
         self.k1 = k1
         self.k2 = k2
@@ -33,58 +33,48 @@ class Charlie:
         self.e = e
         self.f = f
 
-    def computeAproximation(self):
-        self.k1Estimation()
-        self.k2Estimation()
-        self.idEstimation()
+    def computeAproximation(self, l):
+        self.k1Estimation(l)
+        self.k2Estimation(l)
+        self.idEstimation(l)
 
     
-    def k1Estimation(self):
-        output = "Best estimation of k1 is:"
+    def k1Estimation(self,l):
+        output = "K1 estimation:"
         self.k1_estimation = 0 
-        operations = [int(self.d), int(self.f), int(self.a ^ self.d), int(self.a ^ self.b ^ self.f), int(np.uint8(~(self.b ^ self.d))), int(self.b ^ self.f), int(self.a ^ self.b ^ self.d)]
+        operations = [int(self.d), int(self.f), int(self.a ^ self.d), int(self.a ^ self.b ^ self.f), int(np.uint32(~(self.b ^ self.d))), int(self.b ^ self.f), int(self.a ^ self.b ^ self.d)]
         for i in range(self.L):
             for j in range(len(operations)):
                 aux = int(operations[j]/int(2**i))
                 value = aux % 2
                 self.k1_list[i].append(value)
-                #if i == 0:
-                    #print(f'{operations[j]:08b}')
+                
             self.k1_estimation += int(statistics.median(self.k1_list[i])) * 2**i
-        
-        # for i in range(self.L):
-        #     print("List of bins of position",i,"is:",self.k1_list[i])
-        #     print("Sum of numbers:",sum(self.k1_list[i]))
             
-        #print("----------------")
         self.k1_estimation_list.append(self.k1_estimation)
+        if (self.loop-1) ==  l:
+            print("K1 value:     ", f'{self.k1:032b}')
+            print(output, f'{self.k1_estimation:032b}')
 
-        #print(output, f'{self.k1_estimation:08b}')
-
-    def k2Estimation(self):
-        output = "Best estimation of k2 is:"
+    def k2Estimation(self, l):
+        output = "K2 estimation:"
         self.k2_estimation = 0 
-        operations = [int(self.d), int(self.f), int(np.uint8(~(self.a ^ self.d))), int(self.a ^ self.f),  int(self.b ^ self.d),int(np.uint8(~(self.b ^ self.f))), int(self.a ^ self.b ^ self.f), int(self.a ^ self.b ^ self.d)]
+        operations = [int(self.d), int(self.f), int(np.uint32(~(self.a ^ self.d))), int(self.a ^ self.f),  int(self.b ^ self.d),int(np.uint32(~(self.b ^ self.f))), int(self.a ^ self.b ^ self.f), int(self.a ^ self.b ^ self.d)]
         for i in range(self.L):
             for j in range(len(operations)):
                 aux = int(operations[j]/int(2**i))
                 value = aux % 2
                 self.k2_list[i].append(value)
-                """
-                if i == 0:
-                    print(f'{operations[j]:08b}')
-                """
             self.k2_estimation += int(statistics.median(self.k2_list[i])) * 2**i
         
         self.k2_estimation_list.append(self.k2_estimation)
+        if (self.loop-1) ==  l:
+            print("K2 value:     ", f'{self.k2:032b}')
+            print(output, f'{self.k2_estimation:032b}')
             
-        #print("----------------")
-        #print(output, f'{self.k2_estimation:08b}')
 
     def hammingDistance(self,a,b):
-      #  aux = a ^ b
         res = 0
-
         for i in range(self.L):
             aux = int((a ^ b )/int(2**i))
             value = aux % 2
@@ -96,29 +86,22 @@ class Charlie:
         k1_distances = []
         for i in range(self.loop):
             k1_distances.append(self.hammingDistance(self.k1, self.k1_estimation_list[i]))
-        print(k1_distances)
-        print(self.k1)
-        print(self.k1_estimation_list)
         plt.plot(range(self.loop),k1_distances)
         plt.show()
 
 
-    def idEstimation(self):
-        output = "Best estimation of ID is:"
+    def idEstimation(self, l):
+        output = "ID estimation:"
         self.id_estimation = 0 
-        operations = [int(np.uint8(~(self.e ^ self.f))), int(self.a ^ self.b ^ self.e),  int(self.a ^ self.d ^ self.e), int(self.a ^ self.e ^ self.f),
-        int(self.b ^ self.d ^ self.e), int(self.d ^ self.e ^ self.f), int(np.uint8(~(self.a ^ self.b ^ self.d ^ self.e))),
-        int(self.a ^ self.d ^ self.e ^ self.f), int(np.uint8(~(self.b ^ self.d ^ self.e ^ self.f)))]
+        operations = [int(np.uint32(~(self.e ^ self.f))), int(self.a ^ self.b ^ self.e),  int(self.a ^ self.d ^ self.e), int(self.a ^ self.e ^ self.f),
+        int(self.b ^ self.d ^ self.e), int(self.d ^ self.e ^ self.f), int(np.uint32(~(self.a ^ self.b ^ self.d ^ self.e))),
+        int(self.a ^ self.d ^ self.e ^ self.f), int(np.uint32(~(self.b ^ self.d ^ self.e ^ self.f)))]
         for i in range(self.L):
             for j in range(len(operations)):
                 aux = int(operations[j]/int(2**i))
                 value = aux % 2
                 self.id_list[i].append(value)
-                #if i == 0:
-                    #print(f'{operations[j]:08b}')
             self.id_estimation += int(statistics.median(self.id_list[i])) * 2**i 
-        # for i in range(self.L):
-        #     print("List of bins of position",i,"is:",self.k2_list[i])
-        #     print("Sum of numbers:",sum(self.k2_list[i]))
-        print("----------------")
-        print(output, f'{self.id_estimation:08b}')
+        if (self.loop-1) ==  l:
+            print("ID value:     ", f'{self.id:032b}')
+            print(output, f'{self.id_estimation:032b}')

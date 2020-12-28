@@ -10,14 +10,14 @@ class Reader():
         self.pid2 = pid2
         self.k1 = k1
         self.k2 = k2
-        self.n1 = random.randint(0, 255) # ( 8 bits )
-        self.n2 = random.randint(0, 255)
+        self.n1 = random.randint(0, pow(2,32))
+        self.n2 = random.randint(0, pow(2,32))
 
     def generateA(self): # (PID2 and K1 and K2) xor n
         return (self.pid2 & self.k1 &  self.k2) ^ self.n1
 
     def generateB(self): # (negado PID2and K2 and K1) xor n2
-        return (np.uint16(~self.pid2) & self.k2 & self.k1) ^ self.n2
+        return (np.uint32(~self.pid2) & self.k2 & self.k1) ^ self.n2
 
     def generateD(self): # (K1 and n2) xor (K2 and n1)
         return ((self.k1 & self.n2) ^ self.k2 & self.n1)
@@ -37,8 +37,8 @@ class Reader():
             raise Exception("Failed Reader at check n1-n2")
 
     def updateN1N2(self):
-        self.n1 = random.randint(0, 255) # ( 8 bits )
-        self.n2 = random.randint(0, 255)
+        self.n1 = random.randint(0, pow(2,32)) 
+        self.n2 = random.randint(0, pow(2,32))
 
     def recalculatePseudonim(self): # (K1 and n1) xor (K2 and n2)
         self.pid = self.pid2

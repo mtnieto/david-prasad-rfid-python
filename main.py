@@ -3,17 +3,22 @@ from tag import Tag
 from charlie import Charlie
 import logging
 import logging.config
-## Random int random.randint(0, 9)
-## Random bin bin(random.randint(0, 7))
-
+import random
+import sys
 
 class World:
     
-    def __init__(self, loop):  # valores de 0 a 255 para tener 8 bits
-        self.reader = Reader(187,76,112,125) # Reciben lo mismo tag y reader al init (self,pid, pid2, k1, k2)
-        self.tag = Tag(222,187,76,112,125)  #(self,id, pid, pid2, k1, k2)
-        self.charlie = Charlie(187,112,125, loop)
+    def __init__(self, loop): 
+        pid = random.randint(0, (pow(2,32)))
+        pid2 = random.randint(0, (pow(2,32)))
+        k1 = random.randint(0, (pow(2,32)))
+        k2 = random.randint(0, (pow(2,32)))
+        identificator = random.randint(0, pow(2,32))
         self.loop = loop
+
+        self.reader = Reader(pid,pid2,k1,k2) # Reciben lo mismo tag y reader al init (self,pid, pid2, k1, k2)
+        self.tag = Tag(identificator,pid,pid2,k1,k2)  #(self,id, pid, pid2, k1, k2)
+        self.charlie = Charlie(identificator, k1, k2, self.loop)
         #to do , create loop to simulate the rounds
         # Reader starts with a,b,d
     def start_simulation(self):
@@ -37,11 +42,7 @@ class World:
             self.reader.getID() # Calculate ID with E
             self.reader.checkN1N2() # Check with F
             # Round finished, now Charlie tries to guess k1, k2, ID
-            self.charlie.computeAproximation()
-            print("K1:", f'{self.reader.k1:08b}')
-            print("K2:", f'{self.reader.k2:08b}')
-            print("ID:", f'{self.tag.id:08b}')
-
+            self.charlie.computeAproximation(i)
             # Round finished, recalculating pseudonim pid and pid2
             self.reader.recalculatePseudonim()
             self.reader.updateN1N2()
@@ -56,6 +57,6 @@ class World:
 if __name__ == "__main__":
     logging.config.fileConfig('logging.conf')
     logger = logging.getLogger(__name__)
-    world = World(20)
+    world = World(96)
     world.start_simulation()
  

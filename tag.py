@@ -20,7 +20,7 @@ class Tag:
         self.x1 = self.pid2 & self.k1 & self.k2
         self.n1 = self.a ^ self.x1
 
-        self.x2 = np.uint16(~self.pid2) & self.k2 & self.k1
+        self.x2 = np.uint32(~self.pid2) & self.k2 & self.k1
         self.n2 = self.b ^ self.x2
     
     def checkN1N2(self): # K1∧n2 xor ⊕(K2∧n2)
