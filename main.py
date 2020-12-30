@@ -79,12 +79,19 @@ if __name__ == "__main__":
         logger = logging.getLogger(__name__)
         world = World(1)
         world.start_simulation()
-        print(i)    
     
-    output = ""
+    output = "L, K1, K2, ID\n"
+    combinations = ["a","b","d","e","f","a ^ b",
+        "a ^ d","a ^ e","a ^ f","b ^ d","b ^ ","b ^ f","d ^ e",
+        "d ^ f","e ^f ","a ^ b ^ d","a ^ b ^ e","a ^ b ^ f",
+        "a ^ d ^ f","a ^ d ^ f","a ^ e ^ f", 
+        "b ^ d ^ e" ,"b ^ d ^ f","b ^ e ^ f",
+        "d ^ e ^ f " ,"a ^ b ^ d ^ e","a ^ b ^ d ^ f",
+        "a ^ b ^ e ^ f","a ^ d ^ e ^ f","b ^ d ^ e ^ f",
+        "a ^ b ^ d ^ e ^ f"]
     for i in range(31):
         value = np.mean(distances_vectors_k1[i])
-        output += "" + str(value) + ", "
+        output += combinations[i] + ", " + str(value) + ", "
         value = np.mean(distances_vectors_k2[i])
         output += "" + str(value) + ", "
         value = np.mean(distances_vectors_id[i])

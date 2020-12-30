@@ -55,8 +55,7 @@ class Charlie:
     def k1Estimation(self,l):
         output = "K1 estimation:"
         self.k1_estimation = 0 
-       
-        print(len(self.combinations))
+    
         operations = [int(self.d), int(self.f), int(self.a ^ self.d), int(self.a ^ self.b ^ self.f), int(np.uint32(~(self.b ^ self.d))), int(self.b ^ self.f), int(self.a ^ self.b ^ self.d)]
         for i in range(self.L):
             for j in range(len(operations)):
