@@ -5,6 +5,17 @@ import logging
 import logging.config
 import random
 import sys
+import numpy as np
+
+distances_vectors_k1 = []
+distances_vectors_k2 = []
+distances_vectors_id = []
+
+for i in range(31):
+    distances_vectors_k1.append([])
+    distances_vectors_k2.append([])
+    distances_vectors_id.append([])
+
 
 class World:
     
@@ -14,9 +25,10 @@ class World:
         k1 = random.randint(0, (pow(2,32)))
         k2 = random.randint(0, (pow(2,32)))
         identificator = random.randint(0, pow(2,32))
+
         self.loop = loop
 
-        self.reader = Reader(pid,pid2,k1,k2) # Reciben lo mismo tag y reader al init (self,pid, pid2, k1, k2)
+        self.reader = Reader(pid,pid2,k1,k2) # Reciben lo mismo tag y reader al insit (self,pid, pid2, k1, k2)
         self.tag = Tag(identificator,pid,pid2,k1,k2)  #(self,id, pid, pid2, k1, k2)
         self.charlie = Charlie(identificator, k1, k2, self.loop)
         #to do , create loop to simulate the rounds
@@ -42,6 +54,7 @@ class World:
             self.reader.getID() # Calculate ID with E
             self.reader.checkN1N2() # Check with F
             # Round finished, now Charlie tries to guess k1, k2, ID
+            self.charlie.computeCombinations()
             self.charlie.computeAproximation(i)
             # Round finished, recalculating pseudonim pid and pid2
             self.reader.recalculatePseudonim()
@@ -49,14 +62,34 @@ class World:
             self.tag.recalculatePseudonim()
             i+=1
         
-        self.charlie.printPlots()
+        for i in range(31):
+            distances_vectors_k1[i].append(self.charlie.distance_vector_k1[i])            
+            distances_vectors_k2[i].append(self.charlie.distance_vector_k2[i])
+            distances_vectors_id[i].append(self.charlie.distance_vector_id[i])
+        
+    # Tratar los datos
+        #self.charlie.printPlots()
 
         
           
 
 if __name__ == "__main__":
-    logging.config.fileConfig('logging.conf')
-    logger = logging.getLogger(__name__)
-    world = World(65)
-    world.start_simulation()
+    for i in range(1000):
+        logging.config.fileConfig('logging.conf')
+        logger = logging.getLogger(__name__)
+        world = World(1)
+        world.start_simulation()
+        print(i)    
+    
+    output = ""
+    for i in range(31):
+        value = np.mean(distances_vectors_k1[i])
+        output += "" + str(value) + ", "
+        value = np.mean(distances_vectors_k2[i])
+        output += "" + str(value) + ", "
+        value = np.mean(distances_vectors_id[i])
+        output += "" + str(value) + "\n"
+    
+    with open("results.csv", "w") as f:
+        f.write(output)
  
